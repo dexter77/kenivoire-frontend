@@ -12,7 +12,8 @@ import AdDetails from './pages/AdDetail';
 import Navbar from './components/Navbar';
 import MyAds from './pages/MyAds';
 import EditAd from './pages/EditAd';
-// import Messages from './pages/Messages';
+import Conversations from './pages/Conversations';
+import ConversationDetail from './pages/ConversationDetail';
 // import Footer from './components/Footer';
 
 function App() {
@@ -32,7 +33,9 @@ function App() {
           <Route path="/ads/:id" element={<AdDetails />} />
           <Route path="/my-ads/:id" element={<MyAds />} />
           <Route path="/ads/edit/:adId" element={<EditAd />} />
-          {/* <Route path="/messages" element={<Messages />} /> */}
+          <Route path="/messages" element={<Conversations />} />
+          <Route path="/messages/:conversationId" element={<ConversationDetail />} />
+          
         </Routes>
       </div>
       {/* <Footer /> */}

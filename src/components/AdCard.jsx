@@ -40,7 +40,7 @@ const AdCard = ({ ad }) => {
             {ad.title}
           </h2>
           <span className="text-orange-600 font-semibold whitespace-nowrap">
-            {ad.price} FCFA
+            {ad.price.toLocaleString('fr-FR')} FCFA
           </span>
         </div>
 

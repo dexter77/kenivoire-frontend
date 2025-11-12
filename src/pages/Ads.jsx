@@ -9,22 +9,15 @@ export default function Ads() {
   const [error, setError] = useState("");
   const location = useLocation();
 
-  // Fonction pour lire les paramètres de recherche dans l'URL
-  const getQueryParams = () => {
-    const params = new URLSearchParams(location.search);
-    return {
-      q: params.get("q") || "",
-      ville: params.get("ville") || "",
-      prix_max: params.get("prix_max") || "",
-      categorie: params.get("categorie") || "",
-    };
-  };
-
   useEffect(() => {
     const fetchAds = async () => {
       setLoading(true);
       setError("");
-      const { q, ville, prix_max, categorie } = getQueryParams();
+      const params = new URLSearchParams(location.search);
+      const q = params.get("q") || "";
+      const ville = params.get("ville") || "";
+      const prix_max = params.get("prix_max") || "";
+      const categorie = params.get("categorie") || "";
 
       try {
         const res = await api.get("/annonces/", {

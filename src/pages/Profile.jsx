@@ -65,7 +65,7 @@ export default function Profile() {
     if (profileImage) formDataToSend.append('profile_image', profileImage);
 
     try {
-      const response = await api.patch('me/', formDataToSend, {
+      const response = await api.patch('/me/', formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setUser(response.data);
