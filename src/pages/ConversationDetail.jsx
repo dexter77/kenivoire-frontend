@@ -14,7 +14,7 @@ export default function ConversationDetail() {
     ? { Authorization: `Bearer ${authTokens.access}` }
     : {};
 
-  // --- 🔸 Charger la conversation ---
+  // --- Charger la conversation ---
   useEffect(() => {
     const fetchConversation = async () => {
       try {
@@ -28,9 +28,9 @@ export default function ConversationDetail() {
     };
 
     if (conversationId) fetchConversation();
-  }, [conversationId]); // ✅ pas de dépendance sur authHeaders
+  }, [conversationId]);
 
-  // --- 🔸 Envoi d’un message ---
+  // --- Envoi d’un message ---
   const handleSend = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !conversation) return;
@@ -42,7 +42,7 @@ export default function ConversationDetail() {
         { headers: authHeaders }
       );
 
-      // ✅ Mise à jour locale sans refetch
+      // Mise à jour locale sans refetch
       setConversation((prev) => ({
         ...prev,
         messages: [...prev.messages, res.data],
@@ -58,7 +58,7 @@ export default function ConversationDetail() {
     }
   };
 
-  // --- 🔸 Scroll automatique ---
+  // --- Scroll automatique ---
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation?.messages.length]);
@@ -83,7 +83,7 @@ export default function ConversationDetail() {
         )}
         {ad.price && (
           <p className="text-lg font-semibold text-gray-800 mb-1">
-            {ad.price} FCFA
+            {ad.price.toLocaleString('fr-FR')} FCFA
           </p>
         )}
         {ad.location && (
@@ -101,19 +101,45 @@ export default function ConversationDetail() {
         <div className="flex-1 overflow-y-auto mb-4 p-3 bg-white rounded-lg">
           {conversation.messages.length > 0 ? (
             conversation.messages.map((msg) => {
-              // ✅ Si le sender du message est le user connecté
-              const isMine = msg.sender.id === user?.id;
+              const isMine = Number(msg.sender.id) === Number(user?.id);
+              const initials = msg.sender.username
+                ? msg.sender.username.slice(0, 2).toUpperCase()
+                : 'U';
+
               return (
                 <div
                   key={msg.id}
-                  className={`mb-3 p-2 rounded-lg max-w-xs ${
-                    isMine ? 'bg-orange-100 ml-auto' : 'bg-gray-100'
-                  }`}
+                  className={`flex mb-3 items-end ${isMine ? 'justify-end' : 'justify-start'}`}
                 >
-                  <p className="text-sm">{msg.content}</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {new Date(msg.created_at).toLocaleString()}
-                  </p>
+                  {/* Avatar côté gauche pour les autres */}
+                  {!isMine && (
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-400 text-white flex items-center justify-center mr-2 font-semibold text-sm">
+                      {initials}
+                    </div>
+                  )}
+
+                  <div
+                    className={`p-3 rounded-2xl max-w-xs shadow-sm ${
+                      isMine
+                        ? 'bg-orange-500 text-white rounded-br-none'
+                        : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                    }`}
+                  >
+                    <p className="text-sm">{msg.content}</p>
+                    <p className="text-[11px] opacity-70 mt-1 text-right">
+                      {new Date(msg.created_at).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Avatar côté droit pour le user */}
+                  {isMine && (
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center ml-2 font-semibold text-sm">
+                      {initials}
+                    </div>
+                  )}
                 </div>
               );
             })

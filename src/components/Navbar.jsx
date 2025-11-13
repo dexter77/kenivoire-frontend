@@ -41,6 +41,17 @@ export default function Navbar() {
     }
   }, [user]);
 
+  // read messages status changes should also update the unread count
+  useEffect(() => {
+    const handleUpdateUnread = (e) => {
+      setUnreadCount(e.detail || 0);
+  };
+
+    window.addEventListener("updateUnread", handleUpdateUnread);
+    return () => window.removeEventListener("updateUnread", handleUpdateUnread);
+}, []);
+
+
   // --- Recherche ---
   const handleSearch = (e) => {
     e.preventDefault();

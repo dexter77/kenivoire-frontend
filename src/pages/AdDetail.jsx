@@ -37,7 +37,7 @@ export default function AdDetail() {
   useEffect(() => {
     const fetchAd = async () => {
       try {
-        const res = await api.get(`annonces/${id}/`);
+        const res = await api.get(`ads/${id}/`);
         setAd(res.data);
         const imgs = [res.data.image, res.data.image2, res.data.image3].filter(Boolean);
         setMainImage(imgs[0] || "/placeholder.png");
@@ -122,6 +122,9 @@ export default function AdDetail() {
             Publié le {dayjs(ad.created_at).format("DD/MM/YYYY")}
           </p>
         )}
+          <p className="text-gray-500 text-sm mt-2">
+            👁️ {ad.views}
+          </p>
       </main>
 
       {/* --- Colonne droite : Informations du vendeur et bouton --- */}
